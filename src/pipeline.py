@@ -18,6 +18,7 @@ import sys
 from langchain_groq import ChatGroq
 
 from src.core import state_store
+from src.core.database import DatabaseManager
 from src.agents.agent0_mindmap_generator import generate_mindmap
 from src.agents.agent1_miner            import run_miner
 from src.agents.agent2_graph_builder    import run_graph_builder
@@ -140,6 +141,13 @@ def main():
     parser.add_argument("--mode",     type=str, choices=["mindmap", "curriculum", "both"], default=None, help="Choose mode")
     args = parser.parse_args()
 
+    # Initialize Database Manager
+    db = None
+    try:
+        db = DatabaseManager()
+    except Exception as e:
+        print(f"[WARN] Database not configured or unavailable: {e}. Generations will not be stored in MongoDB.")
+
     raw_text = load_text(args)
 
     # Initial Choice
@@ -171,6 +179,10 @@ def main():
             f.write(mermaid_code)
         print("\n✅ Mindmap saved to mindmap.mmd. Use a Mermaid viewer to see it.")
         
+        if db:
+            db_id = db.save_mindmap(mermaid_code=mermaid_code, raw_text=raw_text, topic="Mindmap Generation")
+            print(f"✅ Mindmap stored in MongoDB (ID: {db_id})")
+        
         # Optionally continue to curriculum
         cont = input("\nWould you like to continue to Curriculum building? (y/n): ").lower().strip()
         if cont != 'y':
@@ -190,6 +202,10 @@ def main():
 
     with open(args.output, "w") as f:
         json.dump(results, f, indent=2, default=str)
+
+    if db:
+        db_id = db.save_lecture_deliverable(curriculum_data=results, topic="Curriculum Generation")
+        print(f"\n✅ Curriculum stored in MongoDB (ID: {db_id})")
 
     curriculum = results['curriculum']
     print(f"\n📄 Full pedagogical data saved → {args.output}")
