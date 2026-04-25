@@ -18,6 +18,7 @@ import sys
 from langchain_groq import ChatGroq
 
 from src.core import state_store
+from src.agents.agent0_mindmap_generator import generate_mindmap
 from src.agents.agent1_miner            import run_miner
 from src.agents.agent2_graph_builder    import run_graph_builder
 from src.agents.agent3_cognitive_scorer import run_cognitive_scorer
@@ -132,16 +133,54 @@ def main():
     parser.add_argument("--pdf",      type=str, help="Path to PDF file")
     parser.add_argument("--text",     type=str, help="Raw text input (alternative to PDF)")
     parser.add_argument("--groq-key", type=str, default=os.getenv("GROQ_API_KEY"), help="Groq API key")
+    parser.add_argument("--google-key", type=str, default=os.getenv("GOOGLE_API_KEY"), help="Google API key for Gemini")
     parser.add_argument("--model",    type=str, default="llama-3.1-8b-instant", help="Groq model name")
     parser.add_argument("--output",   type=str, default="curriculum.json", help="Output JSON file")
     parser.add_argument("--quiet",    action="store_true", help="Suppress agent traces")
+    parser.add_argument("--mode",     type=str, choices=["mindmap", "curriculum", "both"], default=None, help="Choose mode")
     args = parser.parse_args()
 
+    raw_text = load_text(args)
+
+    # Initial Choice
+    mode = args.mode
+    if not mode:
+        print("\nWelcome to RetryEd! How would you like to proceed?")
+        print("1. Revise Concepts using Mindmaps (Gemini)")
+        print("2. Directly jump to Curriculum building (Groq)")
+        choice = input("\nEnter choice (1 or 2): ").strip()
+        mode = "mindmap" if choice == "1" else "curriculum"
+
+    if mode == "mindmap":
+        if not args.google_key:
+            print("[ERROR] Provide --google-key or set GOOGLE_API_KEY env var for Mindmap generation")
+            sys.exit(1)
+        
+        mermaid_code = generate_mindmap(
+            raw_text=raw_text,
+            api_key=args.google_key,
+            verbose=not args.quiet
+        )
+        print("\n" + "="*60)
+        print("  GENERATED MINDMAP (Mermaid)")
+        print("="*60)
+        print(mermaid_code)
+        print("="*60)
+        
+        with open("mindmap.mmd", "w") as f:
+            f.write(mermaid_code)
+        print("\n✅ Mindmap saved to mindmap.mmd. Use a Mermaid viewer to see it.")
+        
+        # Optionally continue to curriculum
+        cont = input("\nWould you like to continue to Curriculum building? (y/n): ").lower().strip()
+        if cont != 'y':
+            sys.exit(0)
+
+    # Run Curriculum Pipeline
     if not args.groq_key:
         print("[ERROR] Provide --groq-key or set GROQ_API_KEY env var")
         sys.exit(1)
 
-    raw_text = load_text(args)
     results = run_pipeline(
         raw_text=raw_text,
         groq_api_key=args.groq_key,
