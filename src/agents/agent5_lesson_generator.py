@@ -40,31 +40,31 @@ def _react_step(label: str, thought: str, fn, verbose: bool):
 def _generate_lesson_content(node: Dict, llm: ChatGroq) -> Dict:
     """Calls Groq to generate a complete lesson object for a single node."""
     
-    prompt = f"""You are an expert pedagogical designer. Create a misconception-driven lesson for the following concept.
+    prompt = prompt = f"""
+You are an expert pedagogical designer.
 
-CONCEPT: {node['concept_title']}
-TYPE: {node['concept_type']}
-RAW TEXT: {node['raw_text']}
-DIFFICULTY METRICS: D={node['D']}, A={node['A']}, U={node['U']}
+Return ONLY valid JSON. No markdown, no explanation, no extra text.
 
-Your output must be a STRICTOR JSON object with these fields:
-- node_id: "{node['id']}"
-- misconception: A common mistake or misunderstanding related to this concept.
-- hook: A compelling opening to grab attention.
-- explanation: A clear, concise explanation.
-- example: A concrete example illustrating the concept.
-- practice: A practice exercise.
-- logic_trap_question: A multiple-choice question designed to catch the misconception.
-- expected_wrong_answer: The answer choice a student with the misconception would pick.
-- correct_answer: The actual correct answer.
-- reasoning_paths: {{
-    "wrong_1": "Reasoning for a common wrong path",
-    "wrong_2": "Reasoning for the misconception path",
-    "correct": "Reasoning for the correct path"
+Schema:
+{{
+  "node_id": string,
+  "misconception": string,
+  "hook": string,
+  "explanation": string,
+  "example": string,
+  "practice": string,
+  "logic_trap_question": {{
+    "question": string,
+    "options": ["A", "B", "C", "D"]
+  }},
+  "expected_wrong_answer": string,
+  "correct_answer": string,
+  "reasoning_paths": {{
+    "wrong_1": string,
+    "wrong_2": string,
+    "correct": string
   }}
-
-Return ONLY the JSON object.
-"""
+}}"""
     try:
         response = llm.invoke(prompt)
         content = re.sub(r"```json|```", "", response.content).strip()
