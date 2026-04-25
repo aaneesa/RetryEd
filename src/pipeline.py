@@ -22,6 +22,9 @@ from src.agents.agent1_miner            import run_miner
 from src.agents.agent2_graph_builder    import run_graph_builder
 from src.agents.agent3_cognitive_scorer import run_cognitive_scorer
 from src.agents.agent4_curriculum_engine import run_curriculum_engine
+from src.agents.agent5_lesson_generator import run_lesson_generator
+from src.agents.agent6_weak_spot_tracker import run_weak_spot_tracker
+from src.agents.agent7_adaptive_refiner import run_adaptive_refiner
 
 
 def load_text(args) -> str:
@@ -39,7 +42,7 @@ def load_text(args) -> str:
     sys.exit(1)
 
 
-def run_pipeline(raw_text: str, groq_api_key: str, model: str, verbose: bool) -> list:
+def run_pipeline(raw_text: str, groq_api_key: str, model: str, verbose: bool) -> dict:
     groq_llm = ChatGroq(
         model=model,
         api_key=groq_api_key,
@@ -89,7 +92,39 @@ def run_pipeline(raw_text: str, groq_api_key: str, model: str, verbose: bool) ->
     )
     print(f"\n✅ Agent 4 done — {len(curriculum)} lessons ordered.\n")
 
-    return curriculum
+    print("="*60)
+    print("  AGENT 5 — Lesson Generator (CORE)")
+    print("="*60)
+    lessons = run_lesson_generator(
+        curriculum=curriculum,
+        groq_llm=groq_llm,
+        verbose=verbose
+    )
+    print(f"\n✅ Agent 5 done — {len(lessons)} core lessons generated.\n")
+
+    print("="*60)
+    print("  AGENT 6 — Weak Spot Tracker (Non-LLM)")
+    print("="*60)
+    weak_spots = run_weak_spot_tracker(
+        scorer_output=scorer_output,
+        verbose=verbose
+    )
+    print(f"\n✅ Agent 6 done — {len(weak_spots)} potential failure points identified.\n")
+
+    print("="*60)
+    print("  AGENT 7 — Adaptive Refiner (Simulated Student)")
+    print("="*60)
+    final_curriculum = run_adaptive_refiner(
+        lessons=lessons,
+        groq_llm=groq_llm,
+        verbose=verbose
+    )
+    print(f"\n✅ Agent 7 done — Adaptive refinement complete.\n")
+
+    return {
+        "curriculum": final_curriculum,
+        "weak_spots": weak_spots
+    }
 
 
 def main():
@@ -107,7 +142,7 @@ def main():
         sys.exit(1)
 
     raw_text = load_text(args)
-    curriculum = run_pipeline(
+    results = run_pipeline(
         raw_text=raw_text,
         groq_api_key=args.groq_key,
         model=args.model,
@@ -115,12 +150,17 @@ def main():
     )
 
     with open(args.output, "w") as f:
-        json.dump(curriculum, f, indent=2, default=str)
+        json.dump(results, f, indent=2, default=str)
 
-    print(f"\n📄 Curriculum saved → {args.output}")
-    print("\nFirst 5 lessons:")
+    curriculum = results['curriculum']
+    print(f"\n📄 Full pedagogical data saved → {args.output}")
+    print(f"   Total Lessons: {len(curriculum)}")
+    print(f"   Weak Spots Identified: {len(results['weak_spots'])}")
+    
+    print("\nFirst 5 lessons summary:")
     for lesson in curriculum[:5]:
-        print(f"  {lesson['rank']:>2}. {lesson['concept_title']}  (Pn={lesson['Pn']:.2f}, D={lesson['D']})")
+        status = "✅ Refined" if lesson.get('refined_content') else "✨ Original"
+        print(f"  {lesson['rank']:>2}. [{status}] {lesson['concept_title']} (Pn={lesson['Pn']:.2f})")
 
 
 if __name__ == "__main__":

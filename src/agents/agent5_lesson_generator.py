@@ -1,0 +1,107 @@
+"""
+Agent 5 — Lesson Generator (CORE AGENT)
+ReAct (manual): Thought → Action → Observe — guaranteed sequential execution.
+LLM (Groq) generates high-quality, misconception-driven lessons.
+"""
+
+import json
+import re
+from typing import List, Dict, Optional
+
+from langchain_groq import ChatGroq
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ReAct helpers
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _thought(llm: ChatGroq, context: str) -> str:
+    resp = llm.invoke(
+        f"You are Agent 5 — Lesson Generator. Context:\n{context}\n"
+        "In one sentence, explain WHY you are taking the next step."
+    )
+    return resp.content.strip()
+
+
+def _react_step(label: str, thought: str, fn, verbose: bool):
+    if verbose:
+        print(f"\n  [THOUGHT]  {thought}")
+        print(f"  [ACTION]   {label}")
+    result = fn()
+    if verbose:
+        print(f"  [OBSERVE]  Lesson content generated for node.")
+    return result
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool functions
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _generate_lesson_content(node: Dict, llm: ChatGroq) -> Dict:
+    """Calls Groq to generate a complete lesson object for a single node."""
+    
+    prompt = f"""You are an expert pedagogical designer. Create a misconception-driven lesson for the following concept.
+
+CONCEPT: {node['concept_title']}
+TYPE: {node['concept_type']}
+RAW TEXT: {node['raw_text']}
+DIFFICULTY METRICS: D={node['D']}, A={node['A']}, U={node['U']}
+
+Your output must be a STRICTOR JSON object with these fields:
+- node_id: "{node['id']}"
+- misconception: A common mistake or misunderstanding related to this concept.
+- hook: A compelling opening to grab attention.
+- explanation: A clear, concise explanation.
+- example: A concrete example illustrating the concept.
+- practice: A practice exercise.
+- logic_trap_question: A multiple-choice question designed to catch the misconception.
+- expected_wrong_answer: The answer choice a student with the misconception would pick.
+- correct_answer: The actual correct answer.
+- reasoning_paths: {{
+    "wrong_1": "Reasoning for a common wrong path",
+    "wrong_2": "Reasoning for the misconception path",
+    "correct": "Reasoning for the correct path"
+  }}
+
+Return ONLY the JSON object.
+"""
+    try:
+        response = llm.invoke(prompt)
+        content = re.sub(r"```json|```", "", response.content).strip()
+        return json.loads(content)
+    except Exception as e:
+        return {
+            "node_id": node['id'],
+            "error": str(e),
+            "explanation": f"Failed to generate lesson for {node['concept_title']}"
+        }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Agent runner
+# ─────────────────────────────────────────────────────────────────────────────
+
+def run_lesson_generator(
+    curriculum: List[Dict],
+    groq_llm: ChatGroq,
+    verbose: bool = True
+) -> List[Dict]:
+    if verbose:
+        print("\n  ── ReAct Trace: Agent 5 — Lesson Generator ──")
+
+    lessons = []
+    for i, node in enumerate(curriculum):
+        thought = _thought(groq_llm, f"Generating lesson {i+1}/{len(curriculum)} for node {node['concept_title']}") if verbose else ""
+        
+        lesson = _react_step(
+            label=f"generate_lesson ({node['concept_title']})",
+            thought=thought,
+            fn=lambda n=node: _generate_lesson_content(n, groq_llm),
+            verbose=verbose
+        )
+        lessons.append(lesson)
+
+    if verbose:
+        print(f"\n  ── Agent 5 done. {len(lessons)} lessons generated. ──")
+
+    return lessons
