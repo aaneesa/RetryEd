@@ -24,19 +24,18 @@ def generate_mindmap(raw_text: str, api_key: str = None, model: str = "gemini-2.
     1. Use the 'mindmap' syntax.
     2. Start with the keyword 'mindmap' on its own line.
     3. Use indentation (2 spaces) to show hierarchy (root -> main branches -> sub-branches).
-    4. VERY IMPORTANT: Do NOT use parentheses, brackets, or other special characters for node shapes, just use standard text.
-    5. Wrap every single node's text in double quotes to prevent syntax errors (e.g., "Main Topic").
-    6. Focus on core concepts, definitions, and logical relationships.
-    7. Return ONLY the Mermaid code block. No explanations, no preamble.
+    4. VERY IMPORTANT: Do NOT use quotes, parentheses, brackets, colons, dashes, or any special characters. Use ONLY plain alphanumeric text and spaces.
+    5. Keep node text extremely short and concise (1-4 words max).
+    6. Return ONLY the Mermaid code block. No explanations, no preamble.
 
     Example:
     mindmap
-      "Machine Learning"
-        "Supervised Learning"
-          "Classification"
-          "Regression"
-        "Unsupervised Learning"
-          "Clustering"
+      Machine Learning
+        Supervised Learning
+          Classification
+          Regression
+        Unsupervised Learning
+          Clustering
 
     Educational Content:
     {raw_text[:10000]}
