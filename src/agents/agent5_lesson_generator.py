@@ -40,29 +40,34 @@ def _react_step(label: str, thought: str, fn, verbose: bool):
 def _generate_lesson_content(node: Dict, llm: ChatGroq) -> Dict:
     """Calls Groq to generate a complete lesson object for a single node."""
     
-    prompt = prompt = f"""
+    prompt = f"""
 You are an expert pedagogical designer.
+
+Create a detailed lesson for the following concept:
+Title: {node.get('concept_title', 'Unknown')}
+Type: {node.get('concept_type', 'fact')}
+Raw Text: {node.get('raw_text', '')}
 
 Return ONLY valid JSON. No markdown, no explanation, no extra text.
 
 Schema:
 {{
-  "node_id": string,
-  "misconception": string,
-  "hook": string,
-  "explanation": string,
-  "example": string,
-  "practice": string,
+  "node_id": "{node.get('id', '')}",
+  "misconception": "string",
+  "hook": "string",
+  "explanation": "string",
+  "example": "string",
+  "practice": "string",
   "logic_trap_question": {{
-    "question": string,
+    "question": "string",
     "options": ["A", "B", "C", "D"]
   }},
-  "expected_wrong_answer": string,
-  "correct_answer": string,
+  "expected_wrong_answer": "string",
+  "correct_answer": "string",
   "reasoning_paths": {{
-    "wrong_1": string,
-    "wrong_2": string,
-    "correct": string
+    "wrong_1": "string",
+    "wrong_2": "string",
+    "correct": "string"
   }}
 }}"""
     try:

@@ -1,0 +1,111 @@
+/* ─── Stepper ─── */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.stepper-item-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.stepper-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.stepper-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  transition: all var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+/* Future */
+.stepper-item.future .stepper-indicator {
+  background: var(--surface-hover);
+  color: var(--text-tertiary);
+}
+.stepper-item.future .stepper-label {
+  color: var(--text-tertiary);
+}
+
+/* Active */
+.stepper-item.active {
+  background: var(--accent-gold-dim);
+}
+.stepper-item.active .stepper-indicator {
+  background: var(--accent-gold);
+  color: #0A0A0A;
+  box-shadow: 0 0 12px var(--accent-gold-glow);
+}
+.stepper-item.active .stepper-label {
+  color: var(--accent-gold-light);
+  font-weight: 600;
+}
+
+/* Complete */
+.stepper-item.complete .stepper-indicator {
+  background: var(--status-success);
+  color: #0A0A0A;
+}
+.stepper-item.complete .stepper-label {
+  color: var(--status-success);
+}
+
+.stepper-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-smooth);
+}
+
+.stepper-optional {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  margin-left: 2px;
+  font-style: italic;
+}
+
+.stepper-number {
+  font-size: 0.7rem;
+}
+
+/* Connector */
+.stepper-connector {
+  width: 24px;
+  height: 2px;
+  background: var(--surface-hover);
+  margin: 0 4px;
+  border-radius: 1px;
+  transition: background var(--transition-smooth);
+}
+
+.stepper-connector.complete {
+  background: var(--status-success);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stepper-label {
+    display: none;
+  }
+  .stepper-item {
+    padding: 4px;
+  }
+  .stepper-connector {
+    width: 12px;
+  }
+}

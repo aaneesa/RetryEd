@@ -1,0 +1,147 @@
+/* ─── TypewriterFlow ─── */
+.typewriter-flow {
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  position: relative;
+}
+
+/* Progress */
+.typewriter-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--surface-card);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.typewriter-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Breadcrumbs */
+.typewriter-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-2xl);
+  width: 100%;
+}
+
+.typewriter-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-card);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+}
+
+.breadcrumb-label {
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.breadcrumb-answer {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+/* Question Wrapper */
+.typewriter-question-wrapper {
+  width: 100%;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.typewriter-question-wrapper.exiting {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.typewriter-question-wrapper.entering {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.typewriter-question-counter {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-md);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.typewriter-prompt {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2xl);
+  line-height: 1.4;
+}
+
+.typewriter-cursor {
+  color: var(--accent-gold);
+  animation: typewriter-blink 1s infinite;
+  font-weight: 300;
+  margin-left: 2px;
+}
+
+/* Input */
+.typewriter-input-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.typewriter-input {
+  width: 100%;
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--surface-card);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  text-align: center;
+  outline: none;
+  transition: all var(--transition-smooth);
+}
+
+.typewriter-input:focus {
+  border-color: var(--accent-gold-border);
+  box-shadow: 0 0 0 3px var(--accent-gold-dim), var(--shadow-gold);
+}
+
+.typewriter-input::placeholder {
+  color: var(--text-tertiary);
+  font-size: 0.95rem;
+}
+
+.typewriter-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+/* Pulse Container */
+.typewriter-pulse-container {
+  position: absolute;
+  bottom: var(--space-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

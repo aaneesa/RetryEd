@@ -1,0 +1,304 @@
+/* ─── DeliverableView — Document Reveal ─── */
+.deliverable-view {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+/* Header */
+.deliverable-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-2xl);
+  gap: var(--space-lg);
+}
+
+.deliverable-title {
+  font-family: var(--font-document);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-document);
+  letter-spacing: -0.01em;
+}
+
+.deliverable-meta {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--text-document-secondary);
+  margin-top: var(--space-sm);
+}
+
+/* Tabs */
+.deliverable-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  margin-bottom: var(--space-xl);
+}
+
+.deliverable-tab {
+  padding: var(--space-md) var(--space-lg);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-document-secondary);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.deliverable-tab.active {
+  color: #D4A853;
+  border-bottom-color: #D4A853;
+}
+
+.deliverable-tab:hover:not(.active) {
+  color: var(--text-document);
+}
+
+/* Curriculum List */
+.deliverable-curriculum {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Lesson Card */
+.deliverable-lesson-card {
+  background: var(--surface-document-card);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.deliverable-lesson-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: rgba(212, 168, 83, 0.3);
+}
+
+.deliverable-lesson-card.expanded {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-color: rgba(212, 168, 83, 0.4);
+}
+
+.deliverable-lesson-card.refined {
+  border-left: 3px solid #4ADE80;
+}
+
+.lesson-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.lesson-card-rank {
+  font-family: var(--font-document);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #D4A853;
+  min-width: 40px;
+}
+
+.lesson-card-info {
+  flex: 1;
+}
+
+.lesson-card-title {
+  font-family: var(--font-document);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-document);
+  margin-bottom: var(--space-xs);
+}
+
+.lesson-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.lesson-card-pn {
+  font-size: 0.72rem;
+  color: var(--text-document-secondary);
+  font-family: 'SF Mono', monospace;
+}
+
+.lesson-card-expand-icon {
+  color: var(--text-document-secondary);
+  transition: transform var(--transition-smooth);
+}
+
+.lesson-card-expand-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Lesson Content */
+.lesson-card-content {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.lesson-section h4 {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #D4A853;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-sm);
+}
+
+.lesson-section p {
+  font-family: var(--font-document);
+  font-size: 0.92rem;
+  color: var(--text-document);
+  line-height: 1.7;
+}
+
+.lesson-section p strong {
+  color: var(--text-document);
+  font-weight: 600;
+}
+
+.lesson-section-highlight {
+  background: #FAF6EF;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(212, 168, 83, 0.15);
+}
+
+.lesson-question {
+  font-style: italic;
+  margin-bottom: var(--space-md) !important;
+}
+
+.lesson-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: var(--space-md) 0;
+}
+
+.lesson-option {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--text-document);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0,0,0,0.02);
+  border-radius: var(--radius-sm);
+}
+
+.lesson-correct-answer {
+  color: #16A34A !important;
+  font-weight: 600 !important;
+}
+
+.lesson-section-refined {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.06), rgba(212, 168, 83, 0.06));
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.text-success { color: #16A34A; font-weight: 600; }
+.text-error { color: #DC2626; font-weight: 600; }
+
+.lesson-simulation-detail {
+  font-style: italic;
+  opacity: 0.8;
+  margin-top: var(--space-sm);
+}
+
+/* Weak Spots */
+.deliverable-weakspots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.weakspots-empty {
+  padding: var(--space-2xl);
+  text-align: center;
+}
+
+.weakspots-empty p {
+  color: var(--text-document-secondary);
+  font-family: var(--font-document);
+}
+
+.weakspot-card {
+  background: var(--surface-document-card);
+  border: 1px solid rgba(248, 113, 113, 0.15);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.weakspot-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.weakspot-id {
+  font-family: 'SF Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text-document-secondary);
+}
+
+.weakspot-scores {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.weakspot-score {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.weakspot-score-label {
+  font-size: 0.78rem;
+  color: var(--text-document-secondary);
+  min-width: 80px;
+  font-weight: 500;
+}
+
+.weakspot-score-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.weakspot-score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D4A853, #F87171);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.weakspot-score-fill.uncertainty {
+  background: linear-gradient(90deg, #FBBF24, #F87171);
+}
+
+.weakspot-score-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-document);
+  min-width: 30px;
+  text-align: right;
+}

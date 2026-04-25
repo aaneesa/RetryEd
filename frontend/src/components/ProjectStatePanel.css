@@ -1,0 +1,134 @@
+/* ─── Project State Panel ─── */
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.state-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.state-panel-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.state-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.state-section-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+.state-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+}
+
+.state-label {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.state-value {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  text-align: right;
+  word-break: break-word;
+}
+
+.state-value.mono {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.72rem;
+}
+
+.state-preview {
+  background: var(--surface-card);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.state-preview p {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+/* Events Mini */
+.state-events-mini {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.state-event-mini {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.state-event-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.state-event-dot.running {
+  background: var(--accent-gold);
+  animation: pulse 1.5s infinite;
+}
+
+.state-event-dot.complete {
+  background: var(--status-success);
+}
+
+/* Stats Grid */
+.state-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.state-stat {
+  background: var(--surface-card);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.state-stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.state-stat-label {
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

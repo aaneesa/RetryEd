@@ -1,0 +1,69 @@
+/* ─── App Layout ─── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-primary);
+}
+
+/* ─── Header ─── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--surface-secondary);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.app-header-left,
+.app-header-right {
+  flex: 0 0 180px;
+}
+
+.app-header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.app-header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pedagogical-pulse-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.pulse-label {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+/* ─── Error Banner ─── */
+.error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--status-error-dim);
+  color: var(--status-error);
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(248,113,113,0.2);
+}
+
+/* ─── Main Content ─── */
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}

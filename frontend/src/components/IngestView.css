@@ -1,0 +1,207 @@
+/* ─── Ingest View ─── */
+.ingest-view {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ingest-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.ingest-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.ingest-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Toggle */
+.ingest-toggle {
+  display: flex;
+  background: var(--surface-card);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  margin-bottom: var(--space-xl);
+}
+
+.ingest-toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.ingest-toggle-btn.active {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.ingest-toggle-btn:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+/* Dropzone */
+.ingest-dropzone {
+  border: 2px dashed rgba(255,255,255,0.08);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3xl);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.ingest-dropzone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, var(--accent-gold-dim), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+}
+
+.ingest-dropzone:hover::before,
+.ingest-dropzone.drag-active::before {
+  opacity: 1;
+}
+
+.ingest-dropzone:hover,
+.ingest-dropzone.drag-active {
+  border-color: var(--accent-gold-border);
+  background: var(--surface-elevated);
+}
+
+.ingest-dropzone.has-file {
+  border-style: solid;
+  border-color: var(--accent-gold-border);
+  background: var(--surface-elevated);
+  cursor: default;
+}
+
+.ingest-dropzone-content {
+  position: relative;
+  z-index: 1;
+}
+
+.ingest-upload-icon {
+  color: var(--accent-gold);
+  margin-bottom: var(--space-lg);
+  animation: float 3s ease-in-out infinite;
+}
+
+.ingest-dropzone h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.ingest-dropzone p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.ingest-hint {
+  display: block;
+  margin-top: var(--space-md);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* File Info */
+.ingest-file-info {
+  position: relative;
+  z-index: 1;
+}
+
+.ingest-file-icon {
+  color: var(--accent-gold);
+  margin-bottom: var(--space-md);
+}
+
+.ingest-file-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.ingest-file-info p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-lg);
+}
+
+.ingest-file-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+/* Text Area */
+.ingest-text-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.ingest-textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: var(--space-lg);
+  background: var(--surface-card);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: all var(--transition-smooth);
+}
+
+.ingest-textarea:focus {
+  border-color: var(--accent-gold-border);
+  box-shadow: 0 0 0 3px var(--accent-gold-dim);
+}
+
+.ingest-textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.ingest-text-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ingest-char-count {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.ingest-char-warning {
+  color: var(--status-warning);
+}
