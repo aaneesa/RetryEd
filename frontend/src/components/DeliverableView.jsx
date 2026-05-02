@@ -33,8 +33,155 @@ function DeliverableView({ pipelineResults, mode, mindmapData, collectedInputs }
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF('p', 'mm', 'a4')
-    // ... (rest of PDF logic remains same or can be updated later if needed)
-    // I'll keep the PDF logic as is for now to avoid complexity unless requested
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const margin = 20
+    const contentWidth = pageWidth - margin * 2
+    let yPos = margin
+
+    const checkPageBreak = (needed = 20) => {
+      if (yPos + needed > pageHeight - margin) {
+        doc.addPage()
+        yPos = margin
+        return true
+      }
+      return false
+    }
+
+    // ─── Cover Page ───
+    doc.setFillColor(15, 23, 42) // Deep Slate matching UI
+    doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+    doc.setTextColor(255, 255, 255)
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(32)
+    doc.text('RetryEd', margin, 40)
+
+    doc.setFontSize(14)
+    doc.setTextColor(148, 163, 184)
+    doc.text('Personalized Pedagogical Curriculum', margin, 50)
+
+    doc.setDrawColor(0, 209, 255)
+    doc.setLineWidth(1)
+    doc.line(margin, 58, margin + 40, 58)
+
+    doc.setFontSize(10)
+    doc.setTextColor(255, 255, 255)
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, margin, 75)
+    if (collectedInputs.filename) {
+      doc.text(`Source: ${collectedInputs.filename}`, margin, 82)
+    }
+
+    // ─── Lesson Pages ───
+    sortedCurriculum.forEach((lesson, i) => {
+      doc.addPage()
+      yPos = margin
+
+      const rank = lesson.rank || i + 1
+      const title = lesson.lesson_title || lesson.concept_title || `Lesson ${rank}`
+
+      // Header
+      doc.setTextColor(0, 209, 255)
+      doc.setFontSize(10)
+      doc.setFont('helvetica', 'bold')
+      doc.text(`LESSON ${String(rank).padStart(2, '0')}`, margin, yPos)
+      yPos += 10
+
+      doc.setTextColor(30, 41, 59)
+      doc.setFontSize(22)
+      const titleLines = doc.splitTextToSize(title, contentWidth)
+      doc.text(titleLines, margin, yPos)
+      yPos += (titleLines.length * 10)
+
+      // Section Helper
+      const addSection = (heading, content, isDark = false) => {
+        if (!content) return
+        
+        const lines = doc.splitTextToSize(String(content), contentWidth - (isDark ? 10 : 0))
+        const sectionHeight = (lines.length * 5) + 15
+        checkPageBreak(sectionHeight)
+        
+        if (isDark) {
+          doc.setFillColor(30, 41, 59)
+          doc.roundedRect(margin - 2, yPos - 5, contentWidth + 4, sectionHeight, 2, 2, 'F')
+          doc.setTextColor(255, 255, 255)
+        } else {
+          doc.setTextColor(212, 168, 83)
+        }
+
+        doc.setFontSize(9)
+        doc.setFont('helvetica', 'bold')
+        doc.text(heading.toUpperCase(), margin, yPos)
+        yPos += 6
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(10)
+        if (!isDark) doc.setTextColor(51, 65, 85)
+        
+        lines.forEach(line => {
+          checkPageBreak(6)
+          doc.text(line, isDark ? margin + 5 : margin, yPos)
+          yPos += 5
+        })
+        yPos += 5
+        return sectionHeight
+      }
+
+      addSection('Misconception', lesson.misconception)
+      addSection('The Hook', lesson.hook)
+      addSection('Explanation', lesson.explanation)
+      addSection('Application Example', lesson.example)
+      addSection('Practice Exercise', lesson.practice)
+
+      if (lesson.logic_trap_question) {
+        const q = typeof lesson.logic_trap_question === 'object' 
+          ? lesson.logic_trap_question.question 
+          : lesson.logic_trap_question
+        
+        const optLines = lesson.logic_trap_question.options 
+          ? lesson.logic_trap_question.options.length * 6 
+          : 0
+        
+        const lines = doc.splitTextToSize(String(q), contentWidth - 10)
+        const qHeight = (lines.length * 5) + optLines + 15
+        
+        checkPageBreak(qHeight)
+        doc.setFillColor(30, 41, 59)
+        doc.roundedRect(margin - 2, yPos - 5, contentWidth + 4, qHeight, 2, 2, 'F')
+        
+        doc.setTextColor(255, 255, 255)
+        doc.setFontSize(9)
+        doc.setFont('helvetica', 'bold')
+        doc.text('LOGIC TRAP QUESTION', margin, yPos)
+        yPos += 7
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(10)
+        lines.forEach(line => {
+          doc.text(line, margin + 5, yPos)
+          yPos += 5
+        })
+        
+        if (lesson.logic_trap_question.options) {
+          yPos += 2
+          lesson.logic_trap_question.options.forEach((opt, oi) => {
+            doc.text(`${String.fromCharCode(65 + oi)}) ${opt}`, margin + 8, yPos)
+            yPos += 5
+          })
+        }
+        yPos += 10
+      }
+
+      if (lesson.refined_content) {
+        addSection('Adaptive Refinement', lesson.refined_content)
+      }
+
+      // Page Number
+      doc.setTextColor(148, 163, 184)
+      doc.setFontSize(8)
+      doc.text(`Page ${doc.getNumberOfPages()}`, pageWidth / 2, pageHeight - 10, { align: 'center' })
+    })
+
     doc.save(`RetryEd_Curriculum_${new Date().toISOString().slice(0, 10)}.pdf`)
   }
 
