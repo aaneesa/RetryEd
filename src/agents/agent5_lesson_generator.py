@@ -41,33 +41,36 @@ def _generate_lesson_content(node: Dict, llm: ChatGroq) -> Dict:
     """Calls Groq to generate a complete lesson object for a single node."""
     
     prompt = f"""
-You are an expert pedagogical designer.
+You are an expert pedagogical designer specializing in identifying deep-seated cognitive hurdles.
 
-Create a detailed lesson for the following concept:
+Create a detailed, high-quality lesson for the following concept:
 Title: {node.get('concept_title', 'Unknown')}
 Type: {node.get('concept_type', 'fact')}
 Raw Text: {node.get('raw_text', '')}
+
+Your goal is to identify a GENUINE misconception—not just a simple 'don't know' or 'error', but a specific mental model that is incorrect yet plausible to a beginner.
 
 Return ONLY valid JSON. No markdown, no explanation, no extra text.
 
 Schema:
 {{
   "node_id": "{node.get('id', '')}",
-  "misconception": "string",
-  "hook": "string",
-  "explanation": "string",
-  "example": "string",
-  "practice": "string",
+  "lesson_title": "A catchy, pedagogical title for this specific lesson (e.g., 'The Secret of X' or 'Mastering Y').",
+  "misconception": "A high-quality, specific misconception that students often have about this concept. It should explain the 'wrong logic' clearly.",
+  "hook": "An engaging 'Attention Getter' (Gagné's Event 1) to spark curiosity.",
+  "explanation": "A clear, concise, and pedagogical explanation of the concept.",
+  "example": "A concrete, real-world example illustrating the concept.",
+  "practice": "A small practice exercise for the student.",
   "logic_trap_question": {{
-    "question": "string",
-    "options": ["A", "B", "C", "D"]
+    "question": "A multiple-choice question specifically designed to catch the misconception identified above.",
+    "options": ["Option A", "Option B", "Option C", "Option D"]
   }},
-  "expected_wrong_answer": "string",
-  "correct_answer": "string",
+  "expected_wrong_answer": "The specific option that someone with the misconception would pick.",
+  "correct_answer": "The correct option.",
   "reasoning_paths": {{
-    "wrong_1": "string",
-    "wrong_2": "string",
-    "correct": "string"
+    "wrong_1": "Explain the faulty logic for a common error.",
+    "wrong_2": "Explain the faulty logic related specifically to the 'misconception' field above.",
+    "correct": "The step-by-step correct reasoning."
   }}
 }}"""
     try:

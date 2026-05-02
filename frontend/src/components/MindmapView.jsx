@@ -25,22 +25,25 @@ function MindmapView({ mindmapData, isLoading, onGenerateMindmap, onContinueToCu
         script.onload = () => {
           window.mermaid.initialize({
             startOnLoad: false,
-            theme: 'dark',
+            theme: 'base',
             themeVariables: {
-              primaryColor: '#D4A853',
-              primaryTextColor: '#F5F5F5',
-              primaryBorderColor: '#D4A853',
-              lineColor: '#666666',
-              secondaryColor: '#1E1E1E',
-              tertiaryColor: '#252525',
-              background: '#121212',
-              mainBkg: '#1E1E1E',
-              nodeBkg: '#1E1E1E',
-              nodeBorder: '#D4A853',
-              clusterBkg: '#1A1A1A',
-              clusterBorder: '#333',
-              titleColor: '#F5F5F5',
-              edgeLabelBackground: '#1E1E1E',
+              primaryColor: '#00D1FF', // Electric Blue
+              primaryTextColor: '#FFFFFF',
+              primaryBorderColor: '#00D1FF',
+              lineColor: '#555555',
+              secondaryColor: '#FF6B6B', // Coral
+              tertiaryColor: '#B197FC', // Lavender
+              background: '#0F172A', // Deep Slate
+              mainBkg: '#1E293B',
+              nodeBkg: '#1E293B',
+              nodeBorder: '#334155',
+              clusterBkg: '#1E293B',
+              clusterBorder: '#334155',
+              titleColor: '#F8FAFC',
+              edgeLabelBackground: '#1E293B',
+              // Font settings
+              fontFamily: 'Inter, system-ui, sans-serif',
+              fontSize: '14px',
             },
           })
           doRender(code, container)

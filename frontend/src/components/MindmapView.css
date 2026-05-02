@@ -69,18 +69,21 @@
 }
 
 .mindmap-canvas {
-  background: var(--surface-card);
+  background: #0F172A; /* Match the new deep slate background */
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
-  min-height: 400px;
+  min-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: auto;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
 }
 
 .mindmap-canvas svg {
   max-width: 100%;
+  filter: drop-shadow(0 0 10px rgba(0, 209, 255, 0.1));
 }
 
 .mindmap-code {
